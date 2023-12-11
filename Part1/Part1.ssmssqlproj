@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Part1">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="NASUSPC:NASUSPC\Nasus">
+          <Created>2023-12-10T20:12:18.1778261+01:00</Created>
+          <Type>SQL</Type>
+          <Server>NASUSPC</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="create-copilot.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>create-copilot.sql</FullPath>
+        </FileNode>
+        <FileNode Name="delete-database.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>delete-database.sql</FullPath>
+        </FileNode>
+        <FileNode Name="drop-tables-copilot.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>drop-tables-copilot.sql</FullPath>
+        </FileNode>
+        <FileNode Name="initialize.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>initialize.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>
