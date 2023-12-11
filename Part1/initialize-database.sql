@@ -15,7 +15,7 @@ CREATE TABLE Clients (
 	Join_date DATETIME DEFAULT GETDATE() NOT NULL,
 	Phone_number NVARCHAR(24) NOT NULL,
 	Email NVARCHAR(512) NOT NULL,
-	Points_collected INT DEFAULT 0 CONSTRAINT User_points_not_negative CHECK (Points_collected > 0) NOT NULL
+	Points_collected INT DEFAULT 0 CONSTRAINT User_points_not_negative CHECK (Points_collected >= 0) NOT NULL
 );
 
 
@@ -28,7 +28,7 @@ CREATE TABLE Shops (
 	City NVARCHAR(512) NOT NULL,
 	Address NVARCHAR(512) NOT NULL,
 	Post_code NVARCHAR(512) NOT NULL,
-	Open_data DATETIME DEFAULT GETDATE() NOT NULL,
+	Open_date DATETIME DEFAULT GETDATE() NOT NULL,
 	Close_date DATETIME DEFAULT NULL,
 );
 
@@ -54,8 +54,8 @@ IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name='Sales' AND xtype='U')
 CREATE TABLE Sales (
 	Sale_ID INT PRIMARY KEY IDENTITY,
 	Sale_date DATETIME DEFAULT GETDATE() NOT NULL,
-	Total_cost DECIMAL CONSTRAINT Cost_not_negative CHECK (Total_cost > 0) NOT NULL,
-	Points_collected INT DEFAULT 0 CONSTRAINT Sale_points_not_negative CHECK (Points_collected > 0) NOT NULL,
+	Total_cost DECIMAL(8, 2) CONSTRAINT Cost_not_negative CHECK (Total_cost >= 0) NOT NULL,
+	Points_collected INT DEFAULT 0 CONSTRAINT Sale_points_not_negative CHECK (Points_collected >= 0) NOT NULL,
 	Client_ID INT FOREIGN KEY (Client_ID) REFERENCES Clients(Client_ID) ON DELETE SET NULL ON UPDATE CASCADE,
 	Employee_ID INT FOREIGN KEY (Employee_ID) REFERENCES Employees(Employee_ID) ON UPDATE CASCADE NOT NULL
 );
@@ -103,7 +103,7 @@ CREATE TABLE Products (
 IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name='Price_histories' AND xtype='U')
 CREATE TABLE Price_histories(
 	Price_history_ID INT PRIMARY KEY IDENTITY,
-	Price DECIMAL CONSTRAINT Price_not_negative CHECK (Price > 0) NOT NULL,
+	Price DECIMAL(8, 2) CONSTRAINT Price_not_negative CHECK (Price >= 0) NOT NULL,
 	Start_date DATETIME DEFAULT GETDATE() NOT NULL,
 	Product_ID INT FOREIGN KEY (Product_ID) REFERENCES Products(Product_ID) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
 );
@@ -115,7 +115,7 @@ IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name='Storages' AND xtype='U')
 CREATE TABLE Storages (
 	Shop_ID INT FOREIGN KEY (Shop_ID) REFERENCES Shops(Shop_ID) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
 	Product_ID INT FOREIGN KEY (Product_ID) REFERENCES Products(Product_ID) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
-	Amount REAL CONSTRAINT Storage_amount_not_negative CHECK (Amount > 0) NOT NULL
+	Amount REAL CONSTRAINT Storage_amount_not_negative CHECK (Amount >= 0) NOT NULL
 );
 
 
@@ -124,7 +124,7 @@ IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name='Sales_details' AND xtype='U'
 CREATE TABLE Sales_details (
 	Sale_ID INT FOREIGN KEY (Sale_ID) REFERENCES Sales(Sale_ID) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
 	Product_ID INT FOREIGN KEY (Product_ID) REFERENCES Products(Product_ID) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
-	Amount REAL CONSTRAINT Sale_amount_not_negative CHECK (Amount > 0) NOT NULL
+	Amount REAL CONSTRAINT Sale_amount_not_negative CHECK (Amount >= 0) NOT NULL
 );
 
 
