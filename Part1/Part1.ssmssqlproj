@@ -31,6 +31,12 @@
           <AssociatedConnUserName />
           <FullPath>drop-database.sql</FullPath>
         </FileNode>
+        <FileNode Name="drop-tables.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>drop-tables.sql</FullPath>
+        </FileNode>
         <FileNode Name="initialize-database.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>

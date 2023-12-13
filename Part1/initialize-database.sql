@@ -4,7 +4,7 @@ IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Stores')
 	CREATE DATABASE Stores;
 GO
 
-USE STORES;
+USE Stores;
 
 IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name='Clients' AND xtype='U')
 CREATE TABLE Clients (
@@ -13,9 +13,11 @@ CREATE TABLE Clients (
 	Surname NVARCHAR(512) NOT NULL,
 	Sex SMALLINT CONSTRAINT User_sex_ISO_IEC_5218 CHECK (Sex IN (0, 1, 2, 9)),
 	Join_date DATETIME DEFAULT GETDATE() NOT NULL,
-	Phone_number NVARCHAR(24) NOT NULL,
-	Email NVARCHAR(512) NOT NULL,
-	Points_collected INT DEFAULT 0 CONSTRAINT User_points_not_negative CHECK (Points_collected >= 0) NOT NULL
+	Phone_number NVARCHAR(24) NOT NULL 
+		CONSTRAINT Client_valid_phone CHECK (Phone_number LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+										  OR Phone_number LIKE '+[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
+	Email NVARCHAR(512) NOT NULL CONSTRAINT Client_valid_email CHECK (Email LIKE '%_@__%.__%'),
+	Points_collected INT DEFAULT 0 CONSTRAINT User_points_not_negative CHECK (Points_collected >= 0) NOT NULL,
 );
 
 
@@ -42,8 +44,10 @@ CREATE TABLE Employees(
 	Sex SMALLINT CONSTRAINT Employee_sex_ISO_IEC_5218 CHECK (Sex IN (0, 1, 2, 9)),
 	Employment_date DATETIME DEFAULT GETDATE() NOT NULL,
 	Leave_date DATETIME DEFAULT NULL,
-	Phone_number NVARCHAR(24) NOT NULL,
-	Email NVARCHAR(512) NOT NULL,
+	Phone_number NVARCHAR(24) NOT NULL
+		CONSTRAINT Employee_valid_phone CHECK (Phone_number LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+										  OR Phone_number LIKE '+[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
+	Email NVARCHAR(512) NOT NULL CONSTRAINT Employee_valid_email CHECK (Email LIKE '%_@__%.__%'),
 	Role NVARCHAR(512) NOT NULL,
 	Shop_ID INT FOREIGN KEY (Shop_ID) REFERENCES Shops(Shop_ID) ON UPDATE CASCADE NOT NULL
 );
