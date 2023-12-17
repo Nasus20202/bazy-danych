@@ -7,7 +7,7 @@ SELECT * FROM Clients WHERE Client_ID = @ClientId;
 SELECT * FROM Sales WHERE Sale_ID = @SaleId;
 
 DELETE FROM Clients WHERE Client_ID = @ClientId;
-SELECT 'Client with ID ' + CAST(@ClientId AS VARCHAR) + ' deleted' AS Message;
+SELECT 'Client with ID ' + CAST(@ClientId AS VARCHAR) + ' was deleted' AS Message;
 
 SELECT * FROM Clients WHERE Client_ID = @ClientId;
 SELECT * FROM Sales WHERE Sale_ID = @SaleId;

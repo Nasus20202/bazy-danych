@@ -1,3 +1,5 @@
+-- This version is prepared to show the cascade update functionality
+
 USE master;
 
 IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Stores')
@@ -34,11 +36,16 @@ CREATE TABLE Shops (
 	Close_date DATETIME DEFAULT NULL,
 );
 
+IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name='EmployeeIdSequence' AND xtype='SO')
+CREATE SEQUENCE EmployeeIdSequence
+	AS INT
+	START WITH 1
+	INCREMENT BY 1
 
 
 IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name='Employees' AND xtype='U')
 CREATE TABLE Employees(
-	Employee_ID INT PRIMARY KEY IDENTITY,
+	Employee_ID INT PRIMARY KEY NOT NULL DEFAULT NEXT VALUE FOR EmployeeIdSequence,
 	Name NVARCHAR(512) NOT NULL,
 	Surname NVARCHAR(512) NOT NULL,
 	Sex SMALLINT CONSTRAINT Employee_sex_ISO_IEC_5218 CHECK (Sex IN (0, 1, 2, 9)),

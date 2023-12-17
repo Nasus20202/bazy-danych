@@ -19,11 +19,23 @@
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
-        <FileNode Name="delete-data.sql">
+        <FileNode Name="delete-all-data.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>delete-data.sql</FullPath>
+          <FullPath>delete-all-data.sql</FullPath>
+        </FileNode>
+        <FileNode Name="delete-brand.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>delete-brand.sql</FullPath>
+        </FileNode>
+        <FileNode Name="delete-client.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>delete-client.sql</FullPath>
         </FileNode>
         <FileNode Name="drop-database.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
@@ -48,6 +60,24 @@
           <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>insert-data.sql</FullPath>
+        </FileNode>
+        <FileNode Name="update-cascade-drop-tables.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>update-cascade-drop-tables.sql</FullPath>
+        </FileNode>
+        <FileNode Name="update-cascade-employee-id.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>update-cascade-employee-id.sql</FullPath>
+        </FileNode>
+        <FileNode Name="update-cascade-initialize-database.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>update-cascade-initialize-database.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>
