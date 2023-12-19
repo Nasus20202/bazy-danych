@@ -37,6 +37,12 @@
           <AssociatedConnUserName />
           <FullPath>delete-client.sql</FullPath>
         </FileNode>
+        <FileNode Name="delete-product-cascade.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>delete-product-cascade.sql</FullPath>
+        </FileNode>
         <FileNode Name="drop-database.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
