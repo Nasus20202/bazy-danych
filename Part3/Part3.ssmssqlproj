@@ -19,11 +19,11 @@
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
-        <FileNode Name="sale-total-price.sql">
+        <FileNode Name="select.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:NASUSPC:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>NASUSPC</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>sale-total-price.sql</FullPath>
+          <FullPath>select.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>
