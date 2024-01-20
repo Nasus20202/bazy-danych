@@ -1,14 +1,14 @@
 USE Stores;
 
 -- 1.
--- Firma planuje zrobiæ podsumowanie roku. Ile œrednio sklep zarobi³ na wszystkich
--- produktach w ka¿dym miesi¹cu ubieg³ego roku?
+-- Firma planuje zrobiï¿½ podsumowanie roku. Ile ï¿½rednio sklep zarobiï¿½ na wszystkich
+-- produktach w kaï¿½dym miesiï¿½cu ubiegï¿½ego roku?
 -- (Rozserzenie: klika lat zamiast 1)
 
 DECLARE @StartYear INT = 2019
 DECLARE @EndYear INT = 2023
 SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month', 
-	SUM(S.Total_cost)/(@EndYear - @StartYear + 1) AS 'Average income [z³]'
+	SUM(S.Total_cost)/(@EndYear - @StartYear + 1) AS 'Average income [zï¿½]'
 	FROM SALES S
 	WHERE YEAR(S.Sale_date) >= @StartYear AND YEAR(S.Sale_date) BETWEEN @StartYear AND @EndYear
 	GROUP BY MONTH(S.Sale_date)
@@ -20,8 +20,8 @@ SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month',
 
 GO
 -- 2.
--- Firma analizuje pewien produkt, kiedy jest najwiêksze zapotrzebowanie na niego
--- Uporz¹dkuj miesi¹ce (malej¹co) wed³ug iloœci sprzedanych produktu XXXX
+-- Firma analizuje pewien produkt, kiedy jest najwiï¿½ksze zapotrzebowanie na niego
+-- Uporzï¿½dkuj miesiï¿½ce (malejï¿½co) wedï¿½ug iloï¿½ci sprzedanych produktu XXXX
 
 DECLARE @ProductName NVARCHAR(512) = 'Mleko prosto od krowy';
 SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month',
@@ -39,10 +39,10 @@ SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month',
 
 GO
 -- 3.
--- Firm chce usprawniæ bran¿e X. Wyszukaj wszystkie produkty z bran¿y X, które nie
--- przekroczy³y N iloœci sprzeda¿y.
+-- Firm chce usprawniï¿½ branï¿½e X. Wyszukaj wszystkie produkty z branï¿½y X, ktï¿½re nie
+-- przekroczyï¿½y N iloï¿½ci sprzedaï¿½y.
 
-DECLARE @Category NVARCHAR(512) = 'Artyku³y spo¿ywcze';
+DECLARE @Category NVARCHAR(512) = 'Artykuï¿½y spoï¿½ywcze';
 DECLARE @Threshold INT = 100;
 
 WITH Category_tree AS ( -- Category_tree: recursive query used to traverse through categories and all of its subcategories
@@ -70,11 +70,11 @@ SELECT P.Product_ID, P.Name, SUM(SD.Amount) AS 'Total sold' FROM Products P
 
 GO
 -- 4.
--- Pewien kupuj¹cy szuka na œwiêta bo¿onarodzeniowe dla rodziny produktu, z
--- kategorii Y, którego sprzedano najwiêcej w poprzednim grudniu
+-- Pewien kupujï¿½cy szuka na ï¿½wiï¿½ta boï¿½onarodzeniowe dla rodziny produktu, z
+-- kategorii Y, ktï¿½rego sprzedano najwiï¿½cej w poprzednim grudniu
 -- (Rozserzenie: klika lat zamiast 1)
 
-DECLARE @Category NVARCHAR(512) = 'Artyku³y domowe';
+DECLARE @Category NVARCHAR(512) = 'Artykuï¿½y domowe';
 DECLARE @Month INT = 12; -- 12 for december
 DECLARE @StartYear INT = 2013;
 DECLARE @EndYear INT = 2023;
@@ -104,8 +104,8 @@ SELECT TOP 1 P.Product_ID, P.Name, SUM(SD.Amount) AS 'Total sold' FROM Products 
 
 GO
 -- 5.
--- Klient, aby zwiêkszyæ sprzeda¿ chce daæ przekazaæ bonusowe punkty lojalnoœciowe
--- tym kupuj¹cym którzy w ci¹gu ostatniego roku wydali X na zakupy w seci sklepów bran¿owych.
+-- Klient, aby zwiï¿½kszyï¿½ sprzedaï¿½ chce daï¿½ przekazaï¿½ bonusowe punkty lojalnoï¿½ciowe
+-- tym kupujï¿½cym ktï¿½rzy w ciï¿½gu ostatniego roku wydali X na zakupy w seci sklepï¿½w branï¿½owych.
 -- (modyfikacja: ostatnich 5 lat)
 
 GO
@@ -129,8 +129,8 @@ DROP VIEW Clients_stats_5y
 
 GO
 -- 6.
--- Sklep X przeprowadza remanent i chcia³bym poznaæ wartoœæ wszystkich produktów
--- w swoich magazynach po aktualnego cenie sprzeda¿y.
+-- Sklep X przeprowadza remanent i chciaï¿½bym poznaï¿½ wartoï¿½ï¿½ wszystkich produktï¿½w
+-- w swoich magazynach po aktualnego cenie sprzedaï¿½y.
 
 GO
 CREATE VIEW Current_prices AS
@@ -146,7 +146,7 @@ GO
 
 DECLARE @ShopName NVARCHAR(512) = 'Sklep "Ropucha" Chojnice';
 
-SELECT ROUND(SUM(Price * Amount), 2) AS 'Total value [z³]', @ShopName AS 'Shop name' FROM Products P
+SELECT ROUND(SUM(Price * Amount), 2) AS 'Total value [zï¿½]', @ShopName AS 'Shop name' FROM Products P
 	INNER JOIN Current_prices CP ON CP.Product_ID = P.Product_ID
 	INNER JOIN Storages S ON S.Product_ID = P.Product_ID
 	WHERE S.Shop_ID = (SELECT Shop_ID FROM Shops WHERE Name = @ShopName);
@@ -158,8 +158,8 @@ DROP VIEW Current_prices
 
 GO
 -- 7.
--- Ilu produktów brakuje w magazynach sklepów? Policz, ile w ka¿dym sklepie
--- jest produktów, których liczba w magazynie jest mniejsza ni¿ 10.
+-- Ilu produktï¿½w brakuje w magazynach sklepï¿½w? Policz, ile w kaï¿½dym sklepie
+-- jest produktï¿½w, ktï¿½rych liczba w magazynie jest mniejsza niï¿½ 10.
 
 DECLARE @Threshold INT = 10;
 SELECT SH.Shop_ID, SH.Name, COUNT(P.Product_ID) AS 'Missing products' FROM Products P
@@ -174,8 +174,8 @@ SELECT SH.Shop_ID, SH.Name, COUNT(P.Product_ID) AS 'Missing products' FROM Produ
 
 GO
 -- 8.
--- Jaki produkt by³ najpopularniejszy w ka¿dym ze sklepów? Wyœwietl zestawienie
--- najczêœciej sprzedawanego produktu w ka¿dym ze sklepów.
+-- Jaki produkt byï¿½ najpopularniejszy w kaï¿½dym ze sklepï¿½w? Wyï¿½wietl zestawienie
+-- najczï¿½ciej sprzedawanego produktu w kaï¿½dym ze sklepï¿½w.
 
 WITH Products_sold AS (
 	SELECT SH.Shop_ID, P.Product_ID, SUM(SD.Amount) AS 'Amount' FROM Products P
@@ -190,3 +190,18 @@ SELECT SH.Shop_ID, SH.Name, P.Product_ID, P.Name, PS.Amount FROM Products P
 	INNER JOIN Shops SH ON SH.Shop_ID = PS.Shop_ID
 	WHERE PS.Amount = (SELECT MAX(Amount) FROM Products_sold PS WHERE PS.Shop_ID = SH.Shop_ID)
 	ORDER BY SH.Shop_ID, P.Product_ID
+
+
+
+
+GO
+-- 9.
+-- Podaj rï¿½nice miï¿½dzy najniï¿½szï¿½ a najwyï¿½szï¿½ cenï¿½ produktu?
+-- Porï¿½wnujemy wszystkie ceny danego produktu w bazie. Podaj takï¿½e rï¿½nice procentowe
+
+SELECT P.Product_ID, P.Name, MAX(PH.Price) AS 'Highest price', MIN(PH.Price) AS 'Lowest price', 
+	MAX(PH.Price) - MIN(PH.Price) AS 'Price difference', 
+	FORMAT((MIN(PH.Price) - MAX(PH.Price)) / MAX(PH.Price), 'P') AS 'Discount' FROM Products P
+	INNER JOIN Price_histories PH ON PH.Product_ID = P.Product_ID
+	GROUP BY P.Product_ID, P.Name
+	ORDER BY MAX(PH.Price) - MIN(PH.Price) DESC
