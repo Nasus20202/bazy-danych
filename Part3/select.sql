@@ -5,12 +5,12 @@ USE Stores;
 -- produktach w ka¿dym miesi¹cu ubieg³ego roku?
 -- (Rozserzenie: klika lat zamiast 1)
 
-DECLARE @StartYear1 INT = 2019
-DECLARE @EndYear1 INT = 2023
+DECLARE @StartYear INT = 2019
+DECLARE @EndYear INT = 2023
 SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month', 
-	SUM(S.Total_cost)/(@EndYear1-@StartYear1+1) AS 'Average income [z³]'
+	SUM(S.Total_cost)/(@EndYear - @StartYear + 1) AS 'Average income [z³]'
 	FROM SALES S
-	WHERE YEAR(S.Sale_date) >= @StartYear1 AND YEAR(S.Sale_date) BETWEEN @StartYear1 AND @EndYear1
+	WHERE YEAR(S.Sale_date) >= @StartYear AND YEAR(S.Sale_date) BETWEEN @StartYear AND @EndYear
 	GROUP BY MONTH(S.Sale_date)
 	ORDER BY MONTH(S.Sale_date)
 
@@ -18,18 +18,18 @@ SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month',
 
 
 
-
+GO
 -- 2.
 -- Firma analizuje pewien produkt, kiedy jest najwiêksze zapotrzebowanie na niego
 -- Uporz¹dkuj miesi¹ce (malej¹co) wed³ug iloœci sprzedanych produktu XXXX
 
-DECLARE @ProductName2 NVARCHAR(512) = 'Mleko prosto od krowy';
+DECLARE @ProductName NVARCHAR(512) = 'Mleko prosto od krowy';
 SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month',
 	SUM(SD.Amount) AS 'Amount sold'
 	FROM Sales S
 	LEFT JOIN Sales_details SD ON SD.Sale_ID = S.Sale_ID
 	WHERE SD.Product_ID = (SELECT Product_ID FROM Products P 
-						WHERE P.Name = @ProductName2)
+						WHERE P.Name = @ProductName)
 	GROUP BY MONTH(S.Sale_date)
 	ORDER BY SUM(SD.Amount) DESC, MONTH(S.Sale_date)
 
@@ -37,17 +37,16 @@ SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month',
 
 
 
-
-
+GO
 -- 3.
 -- Firm chce usprawniæ bran¿e X. Wyszukaj wszystkie produkty z bran¿y X, które nie
 -- przekroczy³y N iloœci sprzeda¿y.
 
-DECLARE @Category3 NVARCHAR(512) = 'Artyku³y spo¿ywcze';
-DECLARE @Threshold3 INT = 100;
+DECLARE @Category NVARCHAR(512) = 'Artyku³y spo¿ywcze';
+DECLARE @Threshold INT = 100;
 
 WITH Category_tree AS ( -- Category_tree: recursive query used to traverse through categories and all of its subcategories
-	SELECT Category_ID AS ID, NAME AS N FROM Categories WHERE Categories.Name = @Category3
+	SELECT Category_ID AS ID, NAME AS N FROM Categories WHERE Categories.Name = @Category
 		UNION ALL
 		SELECT Category_ID, NAME FROM Category_tree, Categories
 		WHERE Category_tree.ID = Categories.Parent_ID
@@ -62,26 +61,26 @@ SELECT P.Product_ID, P.Name, SUM(SD.Amount) AS 'Total sold' FROM Products P
 			WHERE Products.Category_ID IN (SELECT ID FROM Category_tree)
 	)
 	GROUP BY P.Product_ID, P.Name
-	HAVING SUM(SD.Amount) <= @Threshold3
+	HAVING SUM(SD.Amount) <= @Threshold
 	ORDER BY SUM(SD.Amount)
 
 
 
 
 
-
+GO
 -- 4.
 -- Pewien kupuj¹cy szuka na œwiêta bo¿onarodzeniowe dla rodziny produktu, z
 -- kategorii Y, którego sprzedano najwiêcej w poprzednim grudniu
 -- (Rozserzenie: klika lat zamiast 1)
 
-DECLARE @Category4 NVARCHAR(512) = 'Artyku³y domowe';
-DECLARE @Month4 INT = 12; -- 12 for december
-DECLARE @StartYear4 INT = 2013;
-DECLARE @EndYear4 INT = 2023;
+DECLARE @Category NVARCHAR(512) = 'Artyku³y domowe';
+DECLARE @Month INT = 12; -- 12 for december
+DECLARE @StartYear INT = 2013;
+DECLARE @EndYear INT = 2023;
 
 WITH Category_tree AS ( -- Category_tree: recursive query used to traverse through categories and all of its subcategories
-	SELECT Category_ID AS ID, NAME AS N FROM Categories WHERE Categories.Name = @Category4
+	SELECT Category_ID AS ID, NAME AS N FROM Categories WHERE Categories.Name = @Category
 		UNION ALL
 		SELECT Category_ID, NAME FROM Category_tree, Categories
 		WHERE Category_tree.ID = Categories.Parent_ID
@@ -95,7 +94,7 @@ SELECT TOP 1 P.Product_ID, P.Name, SUM(SD.Amount) AS 'Total sold' FROM Products 
 			INNER JOIN Categories ON Products.Category_ID = Categories.Category_ID
 			WHERE Products.Category_ID IN (SELECT ID FROM Category_tree)
 	) 
-	AND MONTH(S.Sale_date) = @Month4 AND YEAR(S.Sale_date) BETWEEN @StartYear4 AND @EndYear4
+	AND MONTH(S.Sale_date) = @Month AND YEAR(S.Sale_date) BETWEEN @StartYear AND @EndYear
 	GROUP BY P.Product_ID, P.Name
 	ORDER BY SUM(SD.Amount) DESC
 
@@ -103,8 +102,7 @@ SELECT TOP 1 P.Product_ID, P.Name, SUM(SD.Amount) AS 'Total sold' FROM Products 
 
 
 
-
-
+GO
 -- 5.
 -- Klient, aby zwiêkszyæ sprzeda¿ chce daæ przekazaæ bonusowe punkty lojalnoœciowe
 -- tym kupuj¹cym którzy w ci¹gu ostatniego roku wydali X na zakupy w seci sklepów bran¿owych.
@@ -129,9 +127,7 @@ DROP VIEW Clients_stats_5y
 
 
 
-
-
-
+GO
 -- 6.
 -- Sklep X przeprowadza remanent i chcia³bym poznaæ wartoœæ wszystkich produktów
 -- w swoich magazynach po aktualnego cenie sprzeda¿y.
@@ -148,17 +144,49 @@ SELECT PH.Product_ID, PH.Price FROM Price_histories PH
 	WHERE LU.Last_update = PH.Start_date
 GO
 
-DECLARE @ShopName6 NVARCHAR(512) = 'Sklep "Ropucha" Chojnice';
+DECLARE @ShopName NVARCHAR(512) = 'Sklep "Ropucha" Chojnice';
 
-SELECT ROUND(SUM(Price * Amount), 2) AS 'Total value [z³]', @ShopName6 AS 'Shop name' FROM Products P
+SELECT ROUND(SUM(Price * Amount), 2) AS 'Total value [z³]', @ShopName AS 'Shop name' FROM Products P
 	INNER JOIN Current_prices CP ON CP.Product_ID = P.Product_ID
 	INNER JOIN Storages S ON S.Product_ID = P.Product_ID
-	WHERE S.Shop_ID = (SELECT Shop_ID FROM Shops WHERE Name = @ShopName6);
+	WHERE S.Shop_ID = (SELECT Shop_ID FROM Shops WHERE Name = @ShopName);
 
 DROP VIEW Current_prices
 
 
 
 
+GO
+-- 7.
+-- Ilu produktów brakuje w magazynach sklepów? Policz, ile w ka¿dym sklepie
+-- jest produktów, których liczba w magazynie jest mniejsza ni¿ 10.
+
+DECLARE @Threshold INT = 10;
+SELECT SH.Shop_ID, SH.Name, COUNT(P.Product_ID) AS 'Missing products' FROM Products P
+	INNER JOIN Storages ST ON ST.Product_ID = P.Product_ID
+	INNER JOIN Shops SH ON SH.Shop_ID = ST.Shop_ID
+	WHERE Amount < @Threshold
+	GROUP BY SH.Shop_ID, SH.Name
+	ORDER BY COUNT(P.Product_ID) DESC
 
 
+
+
+GO
+-- 8.
+-- Jaki produkt by³ najpopularniejszy w ka¿dym ze sklepów? Wyœwietl zestawienie
+-- najczêœciej sprzedawanego produktu w ka¿dym ze sklepów.
+
+WITH Products_sold AS (
+	SELECT SH.Shop_ID, P.Product_ID, SUM(SD.Amount) AS 'Amount' FROM Products P
+		INNER JOIN Sales_details SD ON SD.Product_ID = P.Product_ID
+		INNER JOIN Sales S ON S.Sale_ID = SD.Sale_ID
+		INNER JOIN Employees E ON E.Employee_ID = S.Employee_ID
+		INNER JOIN Shops SH ON SH.Shop_ID = E.Shop_ID
+		GROUP BY SH.Shop_ID, P.Product_ID
+)
+SELECT SH.Shop_ID, SH.Name, P.Product_ID, P.Name, PS.Amount FROM Products P
+	INNER JOIN Products_sold PS ON PS.Product_ID = P.Product_ID
+	INNER JOIN Shops SH ON SH.Shop_ID = PS.Shop_ID
+	WHERE PS.Amount = (SELECT MAX(Amount) FROM Products_sold PS WHERE PS.Shop_ID = SH.Shop_ID)
+	ORDER BY SH.Shop_ID, P.Product_ID
