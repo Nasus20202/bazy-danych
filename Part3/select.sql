@@ -5,16 +5,19 @@ USE Stores;
 -- produktach w każdym miesiącu ubiegłego roku?
 -- (Rozserzenie: klika lat zamiast 1)
 
-DECLARE @StartYear INT = 2019
+DECLARE @StartYear INT = 2013
 DECLARE @EndYear INT = 2023
-SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month', 
-	SUM(S.Total_cost)/(@EndYear - @StartYear + 1) AS 'Average income [zł]'
-	FROM SALES S
-	WHERE YEAR(S.Sale_date) >= @StartYear AND YEAR(S.Sale_date) BETWEEN @StartYear AND @EndYear
-	GROUP BY MONTH(S.Sale_date)
-	ORDER BY MONTH(S.Sale_date)
 
-
+SELECT SH.Name AS 'Shop name',
+	DATENAME(MONTH, DATEADD(MONTH, MONTH(SA.Sale_date), 0 ) - 1 ) AS 'Month', 
+	SUM(SA.Total_cost)/(@EndYear - @StartYear + 1) AS 'Average income [zł]',
+	COUNT(SA.Sale_ID) AS 'Sales count'
+	FROM SALES SA
+	INNER JOIN Employees E ON E.Employee_ID = SA.Employee_ID
+	INNER JOIN Shops SH ON SH.Shop_ID = E.Shop_ID
+	WHERE YEAR(SA.Sale_date) BETWEEN @StartYear AND @EndYear
+	GROUP BY SH.Name, MONTH(SA.Sale_date)
+	ORDER BY SH.Name, MONTH(SA.Sale_date)
 
 
 
@@ -116,9 +119,12 @@ CREATE VIEW Clients_stats_5y AS
 	GROUP BY C.Client_ID
 GO
 
-SELECT TOP 100 C.Client_ID, C.Name, C.Surname, C.Email, CS.Total_spent, CS.Sales_count, CS.Average_cost,
+DECLARE @Threshold DECIMAL = 350.0;
+
+SELECT C.Client_ID, C.Name, C.Surname, C.Email, CS.Total_spent, CS.Sales_count, CS.Average_cost,
 	C.Points_collected, CAST(C.Points_collected*0.2 AS INT) AS 'Bonus points' FROM Clients C
 	INNER JOIN Clients_stats_5y CS ON CS.Client_ID = C.Client_ID
+	WHERE CS.Total_spent >= @Threshold
 	ORDER BY CS.Total_spent DESC, Sales_count DESC
 
 DROP VIEW Clients_stats_5y
@@ -175,7 +181,7 @@ SELECT SH.Shop_ID, SH.Name, COUNT(P.Product_ID) AS 'Missing products' FROM Produ
 GO
 -- 8.
 -- Jaki produkt był najpopularniejszy w każdym ze sklepów? Wyświetl zestawienie
--- najczęciej sprzedawanego produktu w każdym ze sklep�w.
+-- najczęciej sprzedawanego produktu w każdym ze sklepów.
 
 WITH Products_sold AS (
 	SELECT SH.Shop_ID, P.Product_ID, SUM(SD.Amount) AS 'Amount' FROM Products P
