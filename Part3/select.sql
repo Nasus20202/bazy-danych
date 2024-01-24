@@ -1,14 +1,14 @@
 USE Stores;
 
 -- 1.
--- Firma planuje zrobi� podsumowanie roku. Ile �rednio sklep zarobi� na wszystkich
--- produktach w ka�dym miesi�cu ubieg�ego roku?
+-- Firma planuje zrobić podsumowanie roku. Ile średnio sklep zarobił na wszystkich
+-- produktach w każdym miesiącu ubiegłego roku?
 -- (Rozserzenie: klika lat zamiast 1)
 
 DECLARE @StartYear INT = 2019
 DECLARE @EndYear INT = 2023
 SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month', 
-	SUM(S.Total_cost)/(@EndYear - @StartYear + 1) AS 'Average income [z�]'
+	SUM(S.Total_cost)/(@EndYear - @StartYear + 1) AS 'Average income [zł]'
 	FROM SALES S
 	WHERE YEAR(S.Sale_date) >= @StartYear AND YEAR(S.Sale_date) BETWEEN @StartYear AND @EndYear
 	GROUP BY MONTH(S.Sale_date)
@@ -20,8 +20,8 @@ SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month',
 
 GO
 -- 2.
--- Firma analizuje pewien produkt, kiedy jest najwi�ksze zapotrzebowanie na niego
--- Uporz�dkuj miesi�ce (malej�co) wed�ug ilo�ci sprzedanych produktu XXXX
+-- Firma analizuje pewien produkt, kiedy jest największe zapotrzebowanie na niego
+-- Uporządkuj miesiące (malejąco) według ilości sprzedanych produktu XXXX
 
 DECLARE @ProductName NVARCHAR(512) = 'Mleko prosto od krowy';
 SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month',
@@ -39,10 +39,10 @@ SELECT DATENAME(MONTH, DATEADD(MONTH, MONTH(S.Sale_date), 0 ) - 1 ) AS 'Month',
 
 GO
 -- 3.
--- Firm chce usprawni� bran�e X. Wyszukaj wszystkie produkty z bran�y X, kt�re nie
--- przekroczy�y N ilo�ci sprzeda�y.
+-- Firm chce usprawnić branże X. Wyszukaj wszystkie produkty z branży X, które nie
+-- przekroczyły N ilości sprzedaży.
 
-DECLARE @Category NVARCHAR(512) = 'Artyku�y spo�ywcze';
+DECLARE @Category NVARCHAR(512) = 'Artykuły spożywcze';
 DECLARE @Threshold INT = 100;
 
 WITH Category_tree AS ( -- Category_tree: recursive query used to traverse through categories and all of its subcategories
@@ -70,11 +70,11 @@ SELECT P.Product_ID, P.Name, SUM(SD.Amount) AS 'Total sold' FROM Products P
 
 GO
 -- 4.
--- Pewien kupuj�cy szuka na �wi�ta bo�onarodzeniowe dla rodziny produktu, z
--- kategorii Y, kt�rego sprzedano najwi�cej w poprzednim grudniu
+-- Pewien kupujący szuka na święta bożonarodzeniowe dla rodziny produktu, z
+-- kategorii Y, którego sprzedano najwięcej w poprzednim grudniu
 -- (Rozserzenie: klika lat zamiast 1)
 
-DECLARE @Category NVARCHAR(512) = 'Artyku�y domowe';
+DECLARE @Category NVARCHAR(512) = 'Artykuły domowe';
 DECLARE @Month INT = 12; -- 12 for december
 DECLARE @StartYear INT = 2013;
 DECLARE @EndYear INT = 2023;
@@ -104,8 +104,8 @@ SELECT TOP 1 P.Product_ID, P.Name, SUM(SD.Amount) AS 'Total sold' FROM Products 
 
 GO
 -- 5.
--- Klient, aby zwi�kszy� sprzeda� chce da� przekaza� bonusowe punkty lojalno�ciowe
--- tym kupuj�cym kt�rzy w ci�gu ostatniego roku wydali X na zakupy w seci sklep�w bran�owych.
+-- Klient, aby zwiększyć sprzedaż chce przekazać bonusowe punkty lojalnościowe
+-- tym kupującym, którzy w ciągu ostatniego roku wydali X na zakupy w seci sklepów branżowych.
 -- (modyfikacja: ostatnich 5 lat)
 
 GO
@@ -129,8 +129,8 @@ DROP VIEW Clients_stats_5y
 
 GO
 -- 6.
--- Sklep X przeprowadza remanent i chcia�bym pozna� warto�� wszystkich produkt�w
--- w swoich magazynach po aktualnego cenie sprzeda�y.
+-- Sklep X przeprowadza remanent i chciałby poznać wartość wszystkich produktów
+-- w swoich magazynach po aktualnego cenie sprzedaży.
 
 GO
 CREATE VIEW Current_prices AS
@@ -146,7 +146,7 @@ GO
 
 DECLARE @ShopName NVARCHAR(512) = 'Sklep "Ropucha" Chojnice';
 
-SELECT ROUND(SUM(Price * Amount), 2) AS 'Total value [z�]', @ShopName AS 'Shop name' FROM Products P
+SELECT ROUND(SUM(Price * Amount), 2) AS 'Total value [zł]', @ShopName AS 'Shop name' FROM Products P
 	INNER JOIN Current_prices CP ON CP.Product_ID = P.Product_ID
 	INNER JOIN Storages S ON S.Product_ID = P.Product_ID
 	WHERE S.Shop_ID = (SELECT Shop_ID FROM Shops WHERE Name = @ShopName);
@@ -158,8 +158,8 @@ DROP VIEW Current_prices
 
 GO
 -- 7.
--- Ilu produkt�w brakuje w magazynach sklep�w? Policz, ile w ka�dym sklepie
--- jest produkt�w, kt�rych liczba w magazynie jest mniejsza ni� 10.
+-- Ilu produktów brakuje w magazynach sklepów? Policz, ile w każdym sklepie
+-- jest produktów, których liczba w magazynie jest mniejsza niż 10.
 
 DECLARE @Threshold INT = 10;
 SELECT SH.Shop_ID, SH.Name, COUNT(P.Product_ID) AS 'Missing products' FROM Products P
@@ -174,8 +174,8 @@ SELECT SH.Shop_ID, SH.Name, COUNT(P.Product_ID) AS 'Missing products' FROM Produ
 
 GO
 -- 8.
--- Jaki produkt by� najpopularniejszy w ka�dym ze sklep�w? Wy�wietl zestawienie
--- najcz�ciej sprzedawanego produktu w ka�dym ze sklep�w.
+-- Jaki produkt był najpopularniejszy w każdym ze sklepów? Wyświetl zestawienie
+-- najczęciej sprzedawanego produktu w każdym ze sklep�w.
 
 WITH Products_sold AS (
 	SELECT SH.Shop_ID, P.Product_ID, SUM(SD.Amount) AS 'Amount' FROM Products P
@@ -196,8 +196,8 @@ SELECT SH.Shop_ID, SH.Name, P.Product_ID, P.Name, PS.Amount FROM Products P
 
 GO
 -- 9.
--- Podaj r�nice mi�dzy najni�sz� a najwy�sz� cen� produktu?
--- Por�wnujemy wszystkie ceny danego produktu w bazie. Podaj tak�e r�nice procentowe
+-- Podaj rónice między najniższą a najwyższą ceną produktu?
+-- Porównujemy wszystkie ceny danego produktu w bazie. Podaj także różnice procentowe
 
 SELECT P.Product_ID, P.Name, MAX(PH.Price) AS 'Highest price', MIN(PH.Price) AS 'Lowest price', 
 	MAX(PH.Price) - MIN(PH.Price) AS 'Price difference', 
